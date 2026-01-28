@@ -14,14 +14,42 @@ const resultDiv = document.getElementById("result");
 // Fees JSON storage
 let feesData = {};
 
-// Fetch fees.json
-fetch("fees.json") // Make sure fees.json is in the same folder as index.html
-  .then((response) => response.json())
+// Remote fees URL (raw GitHub URL)
+const REMOTE_FEES_URL =
+  "https://raw.githubusercontent.com/codedbytim-22/mpesa-fees-data/main/fees.json";
+
+// Fetch remote fees first, fallback to local fees.json
+fetch(REMOTE_FEES_URL)
+  .then((response) => {
+    if (!response.ok) throw new Error("Remote fees failed");
+    return response.json();
+  })
   .then((data) => {
     feesData = data;
-    console.log("Fees data loaded:", feesData); // For debugging
+    console.log("Remote fees loaded");
+    showLastUpdated(); // Display last updated
   })
-  .catch((err) => console.error("Error loading fees:", err));
+  .catch(() => {
+    console.warn("Using local fees fallback");
+    fetch("fees.json")
+      .then((res) => res.json())
+      .then((data) => {
+        feesData = data;
+        console.log("Local fees loaded");
+        showLastUpdated(); // Display last updated
+      })
+      .catch((err) => console.error("Error loading local fees:", err));
+  });
+
+// Show last updated date
+function showLastUpdated() {
+  if (feesData.lastUpdated) {
+    const dateDiv = document.createElement("p");
+    dateDiv.className = "last-updated";
+    dateDiv.textContent = `Fees updated: ${feesData.lastUpdated}`;
+    resultDiv.parentNode.insertBefore(dateDiv, resultDiv);
+  }
+}
 
 // Function to get fee from JSON
 function getFeeFromJSON(type, amount) {
