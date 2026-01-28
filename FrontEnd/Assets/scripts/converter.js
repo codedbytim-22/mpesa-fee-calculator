@@ -21,7 +21,6 @@ async function convertCurrency() {
     const res = await fetch(
       `https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`,
     );
-
     if (!res.ok) throw new Error("API error");
 
     const data = await res.json();

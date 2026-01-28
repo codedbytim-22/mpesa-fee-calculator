@@ -37,30 +37,24 @@
 
       <label for="amount">Amount (Ksh):</label>
       <input type="number" id="amount" placeholder="Enter amount" />
-
       <div id="result" class="results-container"></div>
     </div>
-
-    <link rel="stylesheet" href="Assets/css/style.css" />
 
     <script src="Assets/scripts/script.js"></script>
 
     <script>
-      // Hamburger menu toggle
       const hamburger = document.querySelector(".hamburger");
       const navLinks = document.querySelector(".Navlinks");
-
       hamburger.addEventListener("click", () => {
         navLinks.classList.toggle("active");
         hamburger.classList.toggle("active");
       });
 
-      // Service Worker
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
-          .register("Assets/scripts/service-worker.js")
+          .register("service-worker.js")
           .then(() => console.log("Service Worker Registered"))
-          .catch((err) => console.log("SW registration failed:", err));
+          .catch((err) => console.error("SW registration failed:", err));
       }
     </script>
   </body>

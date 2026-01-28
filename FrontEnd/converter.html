@@ -3,73 +3,59 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Currency Converter</title>
+    <title>Mpesa Fee Calculator</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="Assets/css/style.css" />
+    <link rel="manifest" href="manifest.json" />
   </head>
   <body>
     <!-- NAVIGATION -->
     <nav class="Navigation">
       <div class="navbar">
-        <div class="Logo">💱 Currency</div>
+        <div class="Logo">💰 MpesaCalc</div>
         <ul class="Navlinks">
-          <li><a href="index.html">Fee Calculator</a></li>
+          <li><a href="converter.html">Currency Converter</a></li>
         </ul>
         <div class="hamburger"><span></span><span></span><span></span></div>
       </div>
     </nav>
 
-    <!-- CONVERTER -->
+    <!-- CALCULATOR -->
     <div class="calculator">
-      <h1>Currency Converter</h1>
+      <h1>Mpesa Fee Calculator</h1>
 
-      <label for="amount">Amount:</label>
+      <label for="transactionType">Transaction Type:</label>
+      <select id="transactionType">
+        <option value="send">Send Money</option>
+        <option value="paybill">Paybill</option>
+        <option value="buygoods">Buy Goods & Services</option>
+        <option value="withdraw">Withdraw Cash</option>
+      </select>
+
+      <label for="amount">Amount (Ksh):</label>
       <input type="number" id="amount" placeholder="Enter amount" />
-
-      <label for="fromCurrency">From:</label>
-      <select id="fromCurrency">
-        <option value="USD">USD</option>
-        <option value="KES">KES</option>
-        <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
-      </select>
-
-      <label for="toCurrency">To:</label>
-      <select id="toCurrency">
-        <option value="USD">USD</option>
-        <option value="KES">KES</option>
-        <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
-      </select>
-
-      <button id="convertBtn">Convert</button>
-
       <div id="result" class="results-container"></div>
     </div>
+
+    <script src="Assets/scripts/script.js"></script>
+
+    <script>
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".Navlinks");
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+        hamburger.classList.toggle("active");
+      });
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then(() => console.log("Service Worker Registered"))
+          .catch((err) => console.error("SW registration failed:", err));
+      }
+    </script>
   </body>
 </html>
-<link rel="stylesheet" href="Assets/css/style.css" />
-
-<script src="Assets/scripts/script.js"></script>
-
-<script>
-  // Hamburger menu toggle
-  const hamburger = document.querySelector(".hamburger");
-  const navLinks = document.querySelector(".Navlinks");
-
-  hamburger.addEventListener("click", () => {
-    navLinks.classList.toggle("active");
-    hamburger.classList.toggle("active");
-  });
-
-  // Service Worker
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("assets/scripts/service-worker.js")
-      .then(() => console.log("Service Worker Registered"))
-      .catch((err) => console.log("SW registration failed:", err));
-  }
-</script>
