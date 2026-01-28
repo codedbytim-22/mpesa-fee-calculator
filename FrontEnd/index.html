@@ -41,9 +41,9 @@
       <div id="result" class="results-container"></div>
     </div>
 
-    <link rel="stylesheet" href="assets/CSS/style.css" />
+    <link rel="stylesheet" href="Assets/css/style.css" />
 
-    <script src="assets/scripts/script.js"></script>
+    <script src="Assets/scripts/script.js"></script>
 
     <script>
       // Hamburger menu toggle
@@ -58,7 +58,7 @@
       // Service Worker
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
-          .register("assets/scripts/service-worker.js")
+          .register("Assets/scripts/service-worker.js")
           .then(() => console.log("Service Worker Registered"))
           .catch((err) => console.log("SW registration failed:", err));
       }
