@@ -27,7 +27,6 @@ fetch(REMOTE_FEES_URL)
   .then((data) => {
     feesData = data;
     console.log("Remote fees loaded");
-    showLastUpdated(); // Display last updated
   })
   .catch(() => {
     console.warn("Using local fees fallback");
@@ -36,20 +35,9 @@ fetch(REMOTE_FEES_URL)
       .then((data) => {
         feesData = data;
         console.log("Local fees loaded");
-        showLastUpdated(); // Display last updated
       })
       .catch((err) => console.error("Error loading local fees:", err));
   });
-
-// Show last updated date
-function showLastUpdated() {
-  if (feesData.lastUpdated) {
-    const dateDiv = document.createElement("p");
-    dateDiv.className = "last-updated";
-    dateDiv.textContent = `Fees updated: ${feesData.lastUpdated}`;
-    resultDiv.parentNode.insertBefore(dateDiv, resultDiv);
-  }
-}
 
 // Function to get fee from JSON
 function getFeeFromJSON(type, amount) {
@@ -90,7 +78,7 @@ function calculateFees() {
   const ussdFee = fee;
   const appFee = fee > 0 ? fee - 2 : 0;
 
-  // Generate color-coded HTML
+  // Generate color-coded HTML + last updated date
   resultDiv.innerHTML = `
     <div class="result-card main-fee" style="background:${getFeeColor(fee)}">
       <h2>Fee: Ksh ${fee}</h2>
@@ -103,6 +91,14 @@ function calculateFees() {
       <div class="channel" style="background:${getFeeColor(ussdFee)};">📱 USSD <span>Ksh ${ussdFee}</span></div>
       <div class="channel" style="background:${getFeeColor(appFee)};">🖥️ App <span>Ksh ${appFee}</span></div>
     </div>
+
+    ${
+      feesData.lastUpdated
+        ? `<p style="text-align:center;font-size:12px;opacity:0.7;">
+      Fees updated: ${feesData.lastUpdated}
+    </p>`
+        : ""
+    }
   `;
 
   // Animate cards
