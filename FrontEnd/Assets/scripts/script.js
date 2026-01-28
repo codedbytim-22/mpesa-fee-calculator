@@ -1,9 +1,9 @@
-// Register service worker for offline support
+// Register service worker
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
-    .register("/service-worker.js")
+    .register("service_worker.js")
     .then(() => console.log("Service Worker Registered"))
-    .catch((err) => console.log("Service Worker registration failed:", err));
+    .catch((err) => console.error("SW registration failed:", err));
 }
 
 // DOM elements
@@ -11,68 +11,80 @@ const transactionType = document.getElementById("transactionType");
 const amountInput = document.getElementById("amount");
 const resultDiv = document.getElementById("result");
 
-// Fees JSON storage
-let feesData = {};
+let feesData = null;
 
-// Fetch fees.json
-fetch("fees.json")
+// Load fees.json
+fetch("./fees.json") // ./ ensures relative to current HTML file
   .then((response) => response.json())
   .then((data) => {
     feesData = data;
   })
   .catch((err) => console.error("Error loading fees:", err));
 
-// Get fee from JSON
-function getFeeFromJSON(type, amount) {
-  const table = feesData[type];
-  if (!table) return 0;
-  for (let i = 0; i < table.length; i++) {
-    if (amount <= table[i].max) return table[i].fee;
-  }
-  return table[table.length - 1].fee;
+// Fee lookup
+function getFee(type, amount) {
+  if (!feesData || !feesData[type]) return null;
+  return feesData[type].find((row) => amount <= row.max)?.fee ?? 0;
 }
 
-// Determine color
-function getFeeColor(fee) {
-  if (fee <= 50) return "#28a745";
-  else if (fee <= 100) return "#ffc107";
-  else return "#dc3545";
+// Color helper
+function getColor(value) {
+  if (value <= 50) return "#2ecc71";
+  if (value <= 100) return "#f1c40f";
+  return "#e74c3c";
 }
 
-// Main calculation
+// Main logic
 function calculateFees() {
-  const type = transactionType.value;
   const amount = parseFloat(amountInput.value);
-  if (isNaN(amount) || amount <= 0) {
-    resultDiv.innerHTML =
-      "<p style='color:red;text-align:center;'>Enter a valid amount!</p>";
+  const type = transactionType.value;
+
+  if (!feesData) {
+    resultDiv.innerHTML = "<p style='text-align:center;'>Loading fees…</p>";
     return;
   }
 
-  const fee = getFeeFromJSON(type, amount);
-  const total = amount + fee;
+  if (isNaN(amount) || amount <= 0) {
+    resultDiv.innerHTML =
+      "<p style='color:red;text-align:center;'>Enter a valid amount</p>";
+    return;
+  }
 
-  const agentFee = fee + (type === "send" ? 5 : 10);
-  const ussdFee = fee;
-  const appFee = fee > 0 ? fee - 2 : 0;
+  const baseFee = getFee(type, amount);
+  if (baseFee === null) return;
+
+  // Channel fees (SAFE)
+  const agentFee = baseFee + 10;
+  const ussdFee = baseFee;
+  const appFee = Math.max(baseFee - 2, 0);
 
   resultDiv.innerHTML = `
-    <div class="result-card main-fee" style="background:${getFeeColor(fee)}">
-      <h2>Fee: Ksh ${fee}</h2>
-      <p>Total Deducted: Ksh ${total}</p>
+    <div class="result-card main-fee">
+      <h2>Base Fee: Ksh ${baseFee}</h2>
+      <p>Total Deducted: Ksh ${amount + baseFee}</p>
     </div>
 
     <div class="result-card channels">
-      <h3>Channel Comparison</h3>
-      <div class="channel" style="background:${getFeeColor(agentFee)};">💰 Agent <span>Ksh ${agentFee}</span></div>
-      <div class="channel" style="background:${getFeeColor(ussdFee)};">📱 USSD <span>Ksh ${ussdFee}</span></div>
-      <div class="channel" style="background:${getFeeColor(appFee)};">🖥️ App <span>Ksh ${appFee}</span></div>
+      <h3>Channel Breakdown</h3>
+
+      <div class="channel" style="background:${getColor(agentFee)}">
+        💰 Agent
+        <span>Ksh ${agentFee} (Total: ${amount + agentFee})</span>
+      </div>
+
+      <div class="channel" style="background:${getColor(ussdFee)}">
+        📱 USSD
+        <span>Ksh ${ussdFee} (Total: ${amount + ussdFee})</span>
+      </div>
+
+      <div class="channel" style="background:${getColor(appFee)}">
+        🖥️ App
+        <span>Ksh ${appFee} (Total: ${amount + appFee})</span>
+      </div>
     </div>
   `;
-
-  const cards = document.querySelectorAll(".result-card");
-  cards.forEach((card) => setTimeout(() => card.classList.add("slide-in"), 50));
 }
 
+// Events
 amountInput.addEventListener("input", calculateFees);
 transactionType.addEventListener("change", calculateFees);

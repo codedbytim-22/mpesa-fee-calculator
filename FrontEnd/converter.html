@@ -49,18 +49,27 @@
 
       <div id="result" class="results-container"></div>
     </div>
-
-    <!-- SCRIPTS -->
-    <script src="Assets/scripts/converter.js"></script>
-    <script>
-      // Hamburger menu toggle
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".Navlinks");
-
-      hamburger.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-        hamburger.classList.toggle("active");
-      });
-    </script>
   </body>
 </html>
+<link rel="stylesheet" href="assets/CSS/style.css" />
+
+<script src="assets/scripts/converter.js"></script>
+
+<script>
+  // Hamburger menu toggle
+  const hamburger = document.querySelector(".hamburger");
+  const navLinks = document.querySelector(".Navlinks");
+
+  hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+    hamburger.classList.toggle("active");
+  });
+
+  // Service Worker
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("assets/scripts/service-worker.js")
+      .then(() => console.log("Service Worker Registered"))
+      .catch((err) => console.log("SW registration failed:", err));
+  }
+</script>
