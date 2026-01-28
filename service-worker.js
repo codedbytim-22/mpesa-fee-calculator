@@ -2,12 +2,11 @@ const CACHE_NAME = "mpesa-calculator-cache-v1";
 const urlsToCache = [
   "/",
   "/index.html",
-  "/converter.html",
-  "/fees.json",
+  "/style.css",
+  "/script.js",
   "/manifest.json",
-  "/Assets/css/style.css",
-  "/Assets/scripts/script.js",
-  "/Assets/scripts/converter.js",
+  "/icon-192.png",
+  "/icon-512.png",
 ];
 
 self.addEventListener("install", (event) => {
