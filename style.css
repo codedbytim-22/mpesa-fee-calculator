@@ -1,151 +1,151 @@
-/* Reset & base */
+/* Custom Properties for Consistency */
+:root {
+  --mpesa-green: #26b24a;
+  --mpesa-green-dark: #1e8e3a;
+  --bg-color: #f4f7f6;
+  --card-bg: #ffffff;
+  --text-main: #2d3436;
+  --text-muted: #636e72;
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  --radius: 16px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Poppins", sans-serif;
 }
 
 body {
-  background: #f5f7fa;
-  color: #333;
-  line-height: 1.6;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
   padding: 20px;
 }
 
+.calculator {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
 h1 {
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #007b5f;
+  color: var(--mpesa-green);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: -0.5px;
 }
 
-/* Container styling */
-.calculator,
-.converter {
-  background: #fff;
-  max-width: 480px;
-  margin: 20px auto;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-}
-
-.calculator:hover,
-.converter:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* Form elements */
+/* Form Elements */
 label {
   display: block;
-  margin-top: 15px;
-  font-weight: 500;
-  color: #555;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
 }
 
-input[type="number"],
-select {
+select,
+input {
   width: 100%;
-  padding: 12px 15px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 14px;
+  border: 2px solid #edf2f7;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
   outline: none;
-  transition: border 0.3s;
+  background-color: #fafafa;
 }
 
-input[type="number"]:focus,
-select:focus {
-  border-color: #007b5f;
+select:focus,
+input:focus {
+  border-color: var(--mpesa-green);
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(38, 178, 74, 0.1);
 }
 
-/* Buttons */
-button {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  background: #007b5f;
-  color: #fff;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition:
-    background 0.3s,
-    transform 0.2s;
-}
-
-button:hover {
-  background: #005a44;
-  transform: translateY(-2px);
-}
-
-/* Result cards */
+/* Results Section */
 .results-container {
-  margin-top: 20px;
+  margin-top: 2rem;
+  animation: fadeIn 0.4s ease-out;
 }
 
-.result-card {
-  padding: 15px 20px;
-  margin-top: 15px;
-  border-radius: 10px;
-  color: #fff;
-  transition: all 0.3s;
-  opacity: 0;
-  transform: translateY(20px);
+.result-card.main-fee {
+  background: var(--mpesa-green);
+  color: white;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-.result-card.slide-in {
-  opacity: 1;
-  transform: translateY(0);
+.main-fee h2 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
 }
 
-.result-card.main-fee h2 {
-  font-size: 22px;
-  margin-bottom: 8px;
+.main-fee p {
+  opacity: 0.9;
+  font-size: 0.9rem;
 }
 
-.result-card.main-fee p {
-  font-size: 14px;
-}
-
-/* Channel comparison */
-.result-card.channels h3 {
-  margin-bottom: 10px;
-  font-weight: 600;
-  font-size: 16px;
+/* Channels Styling */
+.channels h3 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: var(--text-main);
 }
 
 .channel {
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
-  font-weight: 500;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease;
 }
 
-/* Footer / update text */
-.result-card p[style*="opacity"] {
-  margin-top: 8px;
+.channel:hover {
+  transform: translateX(5px);
 }
 
-/* Responsive */
-@media (max-width: 500px) {
-  .calculator,
-  .converter {
-    padding: 20px;
-  }
+.channel span {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
 
-  h1 {
-    font-size: 22px;
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  .result-card.main-fee h2 {
-    font-size: 18px;
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  .calculator {
+    padding: 1.5rem;
   }
 }
